@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>NYC_DB — RP</title>
+<title>TOKYO_DB — RP</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -14,7 +14,7 @@
   --bg0:#0c0c0f;--bg1:#111115;--bg2:#16161b;--bg3:#1c1c23;--bg4:#23232c;--bg5:#2b2b36;
   --ln:rgba(255,255,255,.06);--ln2:rgba(255,255,255,.11);
   --t0:#f0f0f3;--t1:#aaaabb;--t2:#666677;--t3:#333344;
-  --ac:#4a8fe2;--ac-d:rgba(74,143,226,.13);
+  --ac:#e8728a;--ac-d:rgba(232,114,138,.13);
   --gn:#4db880;--gn-d:rgba(77,184,128,.13);
   --rd:#e05555;--rd-d:rgba(224,85,85,.13);
   --gd:#c8a84b;--am:#e8a74a;--am-d:rgba(232,167,74,.13);
@@ -364,7 +364,7 @@ body{font-family:var(--sans);background:var(--bg0);color:var(--t0);font-size:14p
 <!-- LOGIN -->
 <div class="view" id="view-login">
 <div id="login-box">
-<div class="login-logo">NYC<em>_</em>DB &mdash; RP</div>
+<div class="login-logo">TOKYO<em>_</em>DB &mdash; RP</div>
 <div class="login-title">Kim olduğunu seç</div>
 <div class="user-grid" id="user-grid"></div>
 <button id="login-btn" onclick="Login.enter()"><i class="fas fa-arrow-right"></i>&nbsp; Giriş Yap</button>
@@ -375,7 +375,7 @@ body{font-family:var(--sans);background:var(--bg0);color:var(--t0);font-size:14p
 <div class="view" id="view-rp"><div id="app">
 <div id="sidebar">
   <div id="sb-header">
-    <span class="sb-brand">NYC<em>_</em>RP</span>
+    <span class="sb-brand">TOKYO<em>_</em>RP</span>
     <button class="btn-icon" id="btn-new-room"><i class="fas fa-plus"></i></button>
   </div>
   <div id="sb-nav">
@@ -440,7 +440,7 @@ body{font-family:var(--sans);background:var(--bg0);color:var(--t0);font-size:14p
 <!-- ADMIN -->
 <div class="view" id="view-admin">
 <div id="adm-header">
-  <span class="adm-brand">NYC<em>_</em>OBSERVER</span>
+  <span class="adm-brand">TOKYO<em>_</em>OBSERVER</span>
   <div class="adm-sep"></div>
   <div class="adm-st"><div class="sdot" id="sdot"></div><span id="stxt" style="color:var(--t2)">Offline</span></div>
   <div class="adm-sep"></div>
@@ -540,8 +540,8 @@ body{font-family:var(--sans);background:var(--bg0);color:var(--t0);font-size:14p
 <script>
 'use strict';
 /* ═══ CONSTANTS ═════════════════════════════════════════ */
-const SUPA_URL='https://vhzroetspwbwmouqkcxe.supabase.co';
-const SUPA_KEY='sb_publishable_kM788c6s2-mOyndFnIdc1A_EKPSIz8J';
+const SUPA_URL='https://nytmjhdxlpttowxogxci.supabase.co';
+const SUPA_KEY='sb_publishable_1n7_W593pAMECio0s-Sgsg_G5vAgyDY';
 const GEM_MDL='gemini-1.5-flash';
 // Gemini API key moved to Edge Function (gemini-proxy)
 // Direct key removed for security — calls go via SUPA_URL/functions/v1/gemini-proxy
@@ -598,7 +598,7 @@ const S={
 const Login={
   sel:null,
   init(){
-    const saved=localStorage.getItem('nyc_rp_user');
+    const saved=localStorage.getItem('tokyo_rp_user');
     if(saved){const u=USERS.find(x=>x.id===saved);if(u){this._start(u);return;}}
     this._render();
     document.getElementById('loader').classList.add('hidden');
@@ -645,7 +645,7 @@ const RP={
   async init(){
     document.getElementById('loader').classList.remove('hidden');
     try{
-      const rows=await DB.get('nyc_db?id=eq.main&select=data');
+      const rows=await DB.get('tokyo_db?id=eq.main&select=data');
       if(rows.length){
         const d=typeof rows[0].data==='string'?JSON.parse(rows[0].data):rows[0].data;
         S.chars=d.characters||[];S.orgs=d.organizations||[];
@@ -657,7 +657,7 @@ const RP={
       const rows=await DB.get('rp_rooms?order=sort_order.asc,created_at.asc');
       if(rows.length)S.rooms=rows;else RP._dfRooms();
     }catch(e){RP._dfRooms();S._off=true;}
-    const sc=localStorage.getItem('rp_active_char');
+    const sc=localStorage.getItem('rp_active_char_tokyo');
     if(sc){const c=S.chars.find(x=>x.id===sc);if(c){S.activeChar=c;S.activeChars=[c];UI.updChar(c);}}
     UI.renderRooms();UI.renderTags();
     const live=S.rooms.find(r=>r.slug==='live')||S.rooms[0];
@@ -756,7 +756,7 @@ const RP={
     el.classList.toggle('fav');
     const on=el.classList.contains('fav');
     toast(on?'★ Favorilere eklendi':'Favorilerden çıkarıldı',on?'success':'');
-    const favs=JSON.parse(localStorage.getItem('rp_favs')||'[]');
+    const favs=JSON.parse(localStorage.getItem('rp_favs_tokyo')||'[]');
     if(on&&!favs.includes(String(id)))favs.push(String(id));
     else{const idx=favs.indexOf(String(id));if(idx>-1)favs.splice(idx,1);}
     localStorage.setItem('rp_favs',JSON.stringify(favs));
@@ -2319,7 +2319,7 @@ Login._start=async function(u){
 <!-- DM Panel View (injected into app views) -->
 <div class="view" id="view-dm" style="display:none">
   <div id="dm-header">
-    <span class="dm-brand">NYC<em>_</em>DM</span>
+    <span class="dm-brand">TOKYO<em>_</em>DM</span>
     <div class="adm-sep"></div>
     <div class="adm-st">
       <div class="sdot" id="dm-sdot"></div>
@@ -2510,13 +2510,13 @@ Login._start=async function(u){
 ════════════════════════════════════════════════════════ */
 window.DM_CONFIG = {
   // ── World identity ──────────────────────────────────
-  world:      'nyc',
-  worldName:  'NYC_DB',
-  dbTable:    'nyc_db',
+  world:      'tokyo',
+  worldName:  'TOKYO_DB',
+  dbTable:    'tokyo_db',
 
   // ── Supabase (same as RP client) ────────────────────
-  supaUrl:    'https://vhzroetspwbwmouqkcxe.supabase.co',
-  supaKey:    'sb_publishable_kM788c6s2-mOyndFnIdc1A_EKPSIz8J',
+  supaUrl:    'https://nytmjhdxlpttowxogxci.supabase.co',
+  supaKey:    'sb_publishable_1n7_W593pAMECio0s-Sgsg_G5vAgyDY',
 
   // ── Gemini — key stored as Edge Function secret ─────
   // Set with: supabase secrets set GEMINI_API_KEY=AIzaSy...
@@ -2525,11 +2525,11 @@ window.DM_CONFIG = {
 
   // ── Players (synced from USERS constant above) ──────
   players: [
-    {id:'eren', name:'Eren', color:'#4a8fe2'},
-    {id:'melih',name:'Melih',color:'#9b6fd4'},
-    {id:'tuna', name:'Tuna', color:'#4db880'},
-    {id:'nes',  name:'Nes',  color:'#e8a74a'},
-    {id:'aley', name:'Aley', color:'#e05555'},
+    {id:'eren', name:'Eren', color:'#e8728a'},
+    
+    
+    {id:'nes',  name:'Nes',  color:'#c8a84b'},
+    {id:'aley', name:'Aley', color:'#7b4a8a'},
   ],
 
   // ── Behaviour ───────────────────────────────────────
